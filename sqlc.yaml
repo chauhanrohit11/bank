@@ -1,0 +1,15 @@
+version: "2"
+project:
+    id: "bank"
+sql:
+  - engine: "postgresql"
+    queries: "./db/query/"
+    schema: "./db/schema/schema.sql"
+    gen:
+      go:
+        package: "db"
+        out: "./db/sqlc"
+    database:
+        uri: "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable"
+    rules:
+        - sqlc/db-prepare
