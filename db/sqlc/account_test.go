@@ -31,8 +31,10 @@ func TestCreateAccount(t *testing.T) {
 
 func TestDeleteAccount(t *testing.T) {
 	account := CreateRandomAccount(t)
-	deletedAccount := testQueries.DeleteAccount(context.Background(), account.ID)
-	require.NotEmpty(t, deletedAccount)
+	err := testQueries.DeleteAccount(context.Background(), account.ID)
+	require.NoError(t, err)
+	_, err = testQueries.GetAccount(context.Background(), account.ID)
+	require.Error(t, err)
 }
 
 func TestGetAccountByID(t *testing.T) {
@@ -41,9 +43,33 @@ func TestGetAccountByID(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, account1.ID, account2.ID)
 }
-
-func TestListAccounts(t *testing.T) {
-
+func TestGetAccountForUpdate(t *testing.T) {
+	TestGetAccountByID(t)
 }
 
-func TestUpdateAccounts(t *testing.T) {}
+func TestListAccounts(t *testing.T) {
+	accounts := make([]Account, 5)
+	for i := 0; i < 5; i++ {
+		accounts[i] = CreateRandomAccount(t)
+	}
+	lap := ListAccountParams{
+		Limit:  5,
+		Offset: 0,
+	}
+	res, err := testQueries.ListAccount(context.Background(), lap)
+	require.NoError(t, err)
+	require.Equal(t, 5, len(res))
+}
+
+func TestUpdateAccounts(t *testing.T) {
+	account := CreateRandomAccount(t)
+	account.Balance = utils.RandomNumber(false)
+	uap := UpdateAccountParams{
+		ID:      account.ID,
+		Balance: utils.RandomNumber(false),
+	}
+	res, err := testQueries.UpdateAccount(context.Background(), uap)
+	require.NoError(t, err)
+	require.Equal(t, res.ID, account.ID)
+
+}
