@@ -1,3 +1,6 @@
+Simple bank project
+[![Run Unit Tests](https://github.com/chauhanrohit11/bank/actions/workflows/test.yml/badge.svg)](https://github.com/chauhanrohit11/bank/actions/workflows/test.yml)
+
 Go version: go1.20.1
 
 Steps to install 
@@ -19,4 +22,4 @@ Project Steps:
 11. Add store methods
 12. Add store test cases
 13. Fix deadlock detected
-14. 
+14. Integrate with github workflows
